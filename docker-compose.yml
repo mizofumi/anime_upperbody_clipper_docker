@@ -1,0 +1,34 @@
+version: '3.9'
+
+x-base_service: &base_service
+    ports:
+      - "${WEBUI_PORT:-7860}:7860"
+    volumes:
+      - &v1 ./data:/data
+      - &v2 ./_output:/output
+    stop_signal: SIGKILL
+    tty: true
+    deploy:
+      resources:
+        reservations:
+          devices:
+              - driver: nvidia
+                device_ids: ['0']
+                capabilities: [compute, utility]
+
+name: webui-docker
+
+services:
+  #  download:
+  #    build: ./services/download/
+  #    profiles: ["download"]
+  #    volumes:
+  #      - *v1
+
+  auto: &automatic
+    <<: *base_service
+    profiles: ["auto"]
+    build: ./
+    image: sd-auto:67
+    environment:
+      - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
