@@ -1,11 +1,11 @@
 version: '3.9'
 
 x-base_service: &base_service
-    ports:
-      - "${WEBUI_PORT:-7860}:7860"
-    volumes:
-      - &v1 ./data:/data
-      - &v2 ./_output:/output
+  #    ports:
+  #      - "${WEBUI_PORT:-7860}:7860"
+  #    volumes:
+  #      - &v1 ./data:/data
+  #      - &v2 ./_output:/output
     stop_signal: SIGKILL
     tty: true
     deploy:
@@ -16,7 +16,7 @@ x-base_service: &base_service
                 device_ids: ['0']
                 capabilities: [compute, utility]
 
-name: webui-docker
+name: anime_upperbody_clipper
 
 services:
   #  download:
@@ -29,6 +29,7 @@ services:
     <<: *base_service
     profiles: ["auto"]
     build: ./
-    image: sd-auto:67
+      #image: sd-auto:67
+    image: docker-registry.booyah.dev/opencv_cuda11:ubuntu20.04
     environment:
       - CLI_ARGS=--allow-code --medvram --xformers --enable-insecure-extension-access --api
